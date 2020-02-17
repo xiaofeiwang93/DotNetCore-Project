@@ -5,6 +5,7 @@ import { Home } from './components/Home';
 import RentalList from './components/RentalList';
 import EditItem from './components/EditItem';
 import Login from './components/Login';
+import NotFound from './components/NotFound';
 
 import './custom.css'
 
@@ -18,6 +19,7 @@ export default class App extends Component {
         <Route path='/rental-list' component={RentalList} />
         <Route path='/edititem' component={EditItem} />
         <Route path='/login' component={Login} />
+        <Route path='/notfound' component={NotFound} />
       </Layout>
     );
   }
