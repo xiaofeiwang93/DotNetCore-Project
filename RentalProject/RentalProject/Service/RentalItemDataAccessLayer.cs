@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RentalProject.Service
 {
-    public class RentalItemDataAccessLayer
+    public class RentalItemDataAccessLayer : IDataAccessLayer
     {
         RentalDBContext db = new RentalDBContext();
 

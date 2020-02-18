@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using RentalProject.Models;
+using RentalProject.Service;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,36 +13,45 @@ namespace RentalProject.Controllers
     [Route("api/[controller]")]
     public class RentalItemController : Controller
     {
+        RentalItemDataAccessLayer objRentalItem = new RentalItemDataAccessLayer();
+
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<string> Get()
+        [Route("api/RentalItem/GetAll")]
+        public IEnumerable<RentalItem> GetAll()
         {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
+            return objRentalItem.GetAllItems();
         }
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]string value)
+        [Route("api/RentalItem/Create")]
+        public int Create(RentalItem rentalItem)
         {
+            return objRentalItem.AddItem(rentalItem);
+        }
+
+        [HttpGet]
+        [Route("api/RentalItem/Detail/{id}")]
+        public RentalItem Details(int id)
+        {
+            return objRentalItem.GetItemData(id);
         }
 
         // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [HttpPut]
+        [Route("api/RentalItem/Edit")]
+        public int Edit(RentalItem rentalItem)
         {
+            return objRentalItem.UpdatItem(rentalItem);
         }
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [Route("api/RentalItem/Delete/{id}")]
+        public int Delete(int id)
         {
+            return objRentalItem.DeleteItem(id);
         }
     }
 }
