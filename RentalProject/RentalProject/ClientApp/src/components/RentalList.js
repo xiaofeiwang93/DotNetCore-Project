@@ -1,6 +1,6 @@
 ﻿import styles from './RentalList.css';
 import { Row, Col, Table, Divider, Tag, Button, Popconfirm, Icon } from 'antd';
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import EditItem from './EditItem'
 //import {
 //    BrowserRouter as Router,
@@ -133,6 +133,18 @@ export default function () {
             expiry: '2019-01-01',
         },
     ];
+
+    //const [itemList, setList] = useState(data);
+
+    //const [hasError, setErrors] = useState(false);
+    //const [planets, setPlanets] = useState({});
+
+    //useEffect(() =>
+    //    fetch("api/RentalItem/GetAll")
+    //        .then(res => res.json())
+    //        .then(res => this.setState({ planets: res }))
+    //        .catch(() => this.setState({ hasErrors: true }))
+    //);
 
     return (
         <div className={styles.normal}>
