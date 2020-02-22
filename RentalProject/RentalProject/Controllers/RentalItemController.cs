@@ -17,7 +17,7 @@ namespace RentalProject.Controllers
 
         // GET: api/<controller>
         [HttpGet]
-        [Route("api/RentalItem/GetAll")]
+        [Route("GetAll")]
         public IEnumerable<RentalItem> GetAll()
         {
             return objRentalItem.GetAllItems();
