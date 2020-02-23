@@ -1,6 +1,7 @@
 ﻿import styles from './RentalList.css';
 import { Row, Col, Table, Divider, Tag, Button, Popconfirm, Icon } from 'antd';
 import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import EditItem from './EditItem'
 //import {
 //    BrowserRouter as Router,
@@ -91,50 +92,6 @@ export default function () {
         },
     ];
 
-    // const data1 = [
-    //     {
-    //         key: '1',
-    //         name: 'CD',
-    //         price: 50,
-    //         photo: 'https://upload.wikimedia.org/wikipedia/commons/c/ca/CD-ROM.png',
-    //         description: 'Black',
-    //         expiry: '2019-01-01',
-    //     },
-    //     {
-    //         key: '2',
-    //         name: 'Mobile Phone',
-    //         price: 200,
-    //         photo: 'https://static.macupdate.com/products/15113/l/phonedirector-for-nokia-logo.png?v=1568296774',
-    //         description: 'Black',
-    //         expiry: '2019-01-01',
-    //     },
-    //     {
-    //         key: '800',
-    //         name: 'BMW M3',
-    //         price: 50,
-    //         photo: 'https://lh3.googleusercontent.com/29FJNEMEz-fcwhVwHhR9olb9QPGIbMegwA3BL08JC3sBoCNt68s8nySZQtjlufqpB1YgO_rIpa8=w128-h128-e365',
-    //         description: 'Black',
-    //         expiry: '2019-01-01',
-    //     },
-    //     {
-    //         key: '4',
-    //         name: 'MacBook',
-    //         price: 100,
-    //         photo: 'https://mingersoft.com/blog/wp-content/uploads/2012/10/Apple-Logo.png',
-    //         description: 'Black',
-    //         expiry: '2019-01-01',
-    //     },
-    //     {
-    //         key: '5',
-    //         name: 'MacBook',
-    //         price: 100,
-    //         photo: 'https://mingersoft.com/blog/wp-content/uploads/2012/10/Apple-Logo.png',
-    //         description: 'Black',
-    //         expiry: '2019-01-01',
-    //     },
-    // ];
-
-    const [hasError, setErrors] = useState(false);
     const [data, setData] = useState([
         {
             key: '1',
@@ -178,66 +135,15 @@ export default function () {
         },
     ]);
 
-    // useEffect(() => {
-    //     async function fetchData() {
-    //       const res = await fetch("https://localhost:44340/api/RentalItem/GetAll");
-    //       res
-    //         .json()
-    //         .then(res => setData(res))
-    //         .catch(err => setErrors(err));
-    //     }
-    
-    //     fetchData();
-    // });
-    
-    const newData = [{
-        key: '4',
-        name: 'Reset MacBook',
-        price: 100,
-        photo: 'https://mingersoft.com/blog/wp-content/uploads/2012/10/Apple-Logo.png',
-        description: 'Black',
-        expiry: '2019-01-01',
-    },
-    {
-        key: '5',
-        name: 'Reset MacBook',
-        price: 100,
-        photo: 'https://mingersoft.com/blog/wp-content/uploads/2012/10/Apple-Logo.png',
-        description: 'Black',
-        expiry: '2019-01-01',
-    },
-    {
-        id: 7,
-        name: "CD",
-        price: 50,
-        photoURL: "https://upload.wikimedia.org/wikipedia/commons/c/ca/CD-ROM.png",
-        description: "Black",
-        expiryDate: "2019-01-01T00:00:00",
-    }];
-
-    useEffect(() =>
-        fetch("api/RentalItem/GetAll")
-            .then(res => {
-                debugger;
-                var responseData = res.json();
-                return responseData;
-                })
-            .then(res => {
-                debugger;
-                var tempArray = [];
-                for(var i in res){
-                    debugger;
-                    tempArray.push(res[i]);
-                }
-                setData({ data: tempArray})
-            })
-            // .catch(() => {
-            //     debugger;
-            //     setErrors({ hasError: true })
-            //     })
-            .catch((e) => {
-                })
-    );
+    useEffect(() => {
+        const fetchData = async () => {
+          const result = await axios(
+            'api/RentalItem/GetAll',
+          );
+          setData(result.data);
+        };
+        fetchData();
+      }, []);
 
     return (
         <div className={styles.normal}>
@@ -255,7 +161,6 @@ export default function () {
                 </Col>
             </Row>
             <Row>
-            <Button type="primary" onClick={() => setData(newData)}>click to reset table</Button>
                 <Col span={24} className='table-title'>
                     <h1>Item List</h1>
                 </Col>
