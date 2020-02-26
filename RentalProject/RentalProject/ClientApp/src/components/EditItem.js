@@ -1,5 +1,7 @@
-﻿import React from 'react'
+﻿import React, { useState, useEffect } from 'react'
 import { Input, DatePicker, InputNumber, Row, Col, Button } from 'antd'
+import moment from 'moment'
+import axios from 'axios';
 import './EditItem.css'
 const { TextArea } = Input;
 
@@ -9,7 +11,33 @@ function onChange(date, dateString) {
     console.log(date, dateString);
 }
 
-export default function createItem() {
+export default function({match}) {
+    const id = match.params.id;
+    const [name, setName] = useState();
+    const [price, setPrice] = useState();
+    const [img, setImg] = useState();
+    const [des, setDes] = useState();
+    const [date, setDate] = useState();
+
+    // const [data, setData] = useState();
+
+    //Details Api
+    useEffect(() => {
+        const fetchData = async () => {
+          const result = await axios(
+            `api/RentalItem/Details/${id}`,
+          );
+        //   setData(result.data);
+        //   console.log(data.name)
+          setName(result.data.name);
+          setPrice(result.data.price);
+          setImg(result.data.photoURL);
+          setDes(result.data.description);
+          setDate(result.data.expiryDate);
+        };
+        fetchData();
+      }, []);
+
     return (
         <div className="edit-container">
             <Row type="flex" justify="center" gutter={[24, 24]}>
@@ -18,13 +46,13 @@ export default function createItem() {
             <Row type="flex" justify="center" gutter={[24, 24]}>
                 <Col span={4}>
                     <div className="gutter-box">
-                        <Input placeholder="Name" defaultValue="BMW M3" size="large" />
+                        <Input placeholder="Name" value={name} size="large" />
                     </div>
                 </Col>
                 <Col span={4}>
                     <div className="gutter-box">
                         <InputNumber
-                            defaultValue={50}
+                            value={price}
                             formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             parser={value => value.replace(/\$\s?|(,*)/g, '')}
                             onChange={onChange}
@@ -37,18 +65,18 @@ export default function createItem() {
             <Row type="flex" justify="center" gutter={[24, 24]}>
                 <Col span={4}>
                     <div className="gutter-box">
-                        <TextArea placeholder="Image Url" size="large" defaultValue="https://lh3.googleusercontent.com/29FJNEMEz-fcwhVwHhR9olb9QPGIbMegwA3BL08JC3sBoCNt68s8nySZQtjlufqpB1YgO_rIpa8=w128-h128-e365" autoSize={{ minRows: 3 }} />
+                        <TextArea placeholder="Image Url" size="large" value={img} autoSize={{ minRows: 3 }} />
                     </div>
                 </Col>
                 <Col span={4}>
                     <div className="gutter-box">
-                        <TextArea placeholder="Description" defaultValue="BMW M3 Description Area" size="large" autoSize={{ minRows: 3 }} />
+                        <TextArea placeholder="Description" value={des} size="large" autoSize={{ minRows: 3 }} />
                     </div>
                 </Col>
             </Row>
             <Row type="flex" justify="center" gutter={[24, 24]}>
                 <div className="gutter-box">
-                    <DatePicker onChange={onChange} />
+                    <DatePicker value={moment(date)} onChange={onChange} />
                 </div>
             </Row>
             <Row type="flex" justify="center" gutter={[24, 24]} style={{ marginTop: "12px" }}>

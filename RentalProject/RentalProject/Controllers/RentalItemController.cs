@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using RentalProject.Models;
 using RentalProject.Service;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace RentalProject.Controllers
 {
     [Route("api/[controller]")]
@@ -25,14 +23,14 @@ namespace RentalProject.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        [Route("api/RentalItem/Create")]
+        [Route("Create")]
         public int Create(RentalItem rentalItem)
         {
             return objRentalItem.AddItem(rentalItem);
         }
 
         [HttpGet]
-        [Route("api/RentalItem/Detail/{id}")]
+        [Route("Details/{id}")]
         public RentalItem Details(int id)
         {
             return objRentalItem.GetItemData(id);
@@ -40,7 +38,7 @@ namespace RentalProject.Controllers
 
         // PUT api/<controller>/5
         [HttpPut]
-        [Route("api/RentalItem/Edit")]
+        [Route("Edit")]
         public int Edit(RentalItem rentalItem)
         {
             return objRentalItem.UpdatItem(rentalItem);
@@ -48,7 +46,7 @@ namespace RentalProject.Controllers
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        [Route("api/RentalItem/Delete/{id}")]
+        [Route("Delete/{id}")]
         public int Delete(int id)
         {
             return objRentalItem.DeleteItem(id);
