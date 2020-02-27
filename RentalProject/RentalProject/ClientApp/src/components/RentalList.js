@@ -1,5 +1,5 @@
 ﻿import styles from './RentalList.css';
-import { Row, Col, Table, Divider, Tag, Button, Popconfirm, Icon } from 'antd';
+import { Row, Col, Table, Divider, Tag, Button, Popconfirm, Icon, message } from 'antd';
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import EditItem from './EditItem'
@@ -19,6 +19,33 @@ import EditItem from './EditItem'
 // }
 
 export default function () {
+    const [data, setData] = useState([]);
+
+    //GetAll Api
+    useEffect(() => {
+        const fetchData = async () => {
+          const result = await axios(
+            'api/RentalItem/GetAll',
+          );
+          setData(result.data);
+        };
+        fetchData();
+    }, []);
+
+    const onDelete = (id)=>{
+        console.log(id)
+        const fetchdata = async () => {
+            const result = await axios.delete(
+              `api/rentalitem/delete/${id}`,
+            );
+            const rerender = await axios(
+                'api/RentalItem/GetAll',
+              );
+              setData(rerender.data);
+          };
+        fetchdata();
+        message.success('Item Deleted');
+    }
 
     const columns = [
         {
@@ -71,7 +98,6 @@ export default function () {
             align: 'center',
             render: (text, record) => (
                 <span>
-                    {/* <Button onClick={event => document.location.href = '/EditItem/' + record.id} type="primary">Edit</Button> */}
                     <Button href={`/EditItem/${record.id}`} type="primary">Edit</Button>
                 </span>
             ),
@@ -84,6 +110,9 @@ export default function () {
                 <span>
                     <Popconfirm
                         title="Are you sure？"
+                        onConfirm={() => onDelete(record.id)}
+                        okText="Yes"
+                        cancelText="No"
                         icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
                     >
                         <Button type="primary">Delete</Button>
@@ -92,19 +121,6 @@ export default function () {
             ),
         },
     ];
-
-    const [data, setData] = useState([]);
-
-    //GetAll Api
-    useEffect(() => {
-        const fetchData = async () => {
-          const result = await axios(
-            'api/RentalItem/GetAll',
-          );
-          setData(result.data);
-        };
-        fetchData();
-    }, []);
 
     return (
         <div className={styles.normal}>
@@ -125,7 +141,7 @@ export default function () {
                 <Col span={24} className='table-title'>
                     <h1>Item List</h1>
                 </Col>
-                <Table pagination={false} columns={columns} dataSource={data} />
+                <Table rowKey={record => record.id} pagination={false} columns={columns} dataSource={data} />
             </Row>
         </div>
     );
