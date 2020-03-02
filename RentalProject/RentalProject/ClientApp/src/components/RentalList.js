@@ -20,7 +20,7 @@ export default function () {
 
     //Handle Delete
     const onDelete = (id)=>{
-        console.log(id)
+        //console.log(id)
         const fetchdata = async () => {
             await axios.delete(
               `api/rentalitem/delete/${id}`,

@@ -1,4 +1,5 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
+import axios from 'axios';
 import {
     Form,
     Input,
@@ -24,7 +25,13 @@ class sendMessageForm extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-            console.log('Received values of form: ', values);
+                //console.log('Received values of form: ', values);
+                const fetchdata = async () => {
+                    await axios.delete(
+                      `api/message/Create/${values}`,
+                    );
+                  };
+                fetchdata();
             }
         });
     };
