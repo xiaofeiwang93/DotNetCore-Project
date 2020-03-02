@@ -10,6 +10,7 @@ namespace RentalProject.Service
     public class RentalDBContext : DbContext
     {
         public DbSet<RentalItem> RentalItems { get; set; }
+        public DbSet<Message> Messages { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Data Source=localhost\SQLEXPRESS;Initial Catalog=RentalProject;Persist Security Info=True;User ID=RentalProject;Password=v4xKLgz8JW");

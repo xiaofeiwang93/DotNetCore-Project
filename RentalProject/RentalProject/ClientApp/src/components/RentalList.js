@@ -3,24 +3,10 @@ import { Row, Col, Table, Divider, Tag, Button, Popconfirm, Icon, message } from
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import EditItem from './EditItem'
-//import {
-//    BrowserRouter as Router,
-//    Switch,
-//    Route,
-//    Link,
-//    useParams,
-//    Redirect
-//} from "react-router-dom";
-
-// function editItem(e) {
-//   e.preventDefault();
-//   console.log('The link was clicked.');
-//   <Redirect to={EditItem}/>
-// }
 
 export default function () {
     const [data, setData] = useState([]);
-
+    
     //GetAll Api
     useEffect(() => {
         const fetchData = async () => {
@@ -30,18 +16,15 @@ export default function () {
           setData(result.data);
         };
         fetchData();
-    }, []);
+    }, [data]);
 
+    //Handle Delete
     const onDelete = (id)=>{
         console.log(id)
         const fetchdata = async () => {
-            const result = await axios.delete(
+            await axios.delete(
               `api/rentalitem/delete/${id}`,
             );
-            const rerender = await axios(
-                'api/RentalItem/GetAll',
-              );
-              setData(rerender.data);
           };
         fetchdata();
         message.success('Item Deleted');

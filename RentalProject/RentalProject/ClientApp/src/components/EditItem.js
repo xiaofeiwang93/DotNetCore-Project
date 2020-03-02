@@ -7,37 +7,33 @@ const { TextArea } = Input;
 
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 
-function onChange(date, dateString) {
-    console.log(date, dateString);
-}
-
 export default function({match}) {
     const id = match.params.id;
-    const [name, setName] = useState();
-    const [price, setPrice] = useState();
-    const [img, setImg] = useState();
-    const [des, setDes] = useState();
-    const [date, setDate] = useState();
 
-    // const [data, setData] = useState();
+    const [data, setData] = useState();
 
     //Details Api
-    useEffect(() => {
-        const fetchData = async () => {
-          const result = await axios(
+    useEffect( async () => {
+        const result = await axios(
             `api/RentalItem/Details/${id}`,
           );
-        //   setData(result.data);
-        //   console.log(data.name)
-          setName(result.data.name);
-          setPrice(result.data.price);
-          setImg(result.data.photoURL);
-          setDes(result.data.description);
-          setDate(result.data.expiryDate);
-        };
-        fetchData();
-      }, []);
+        setData(result.data);
+    },[]);
 
+    function onChangeDate(date, dateString) {
+        console.log(date, dateString);
+    }
+    
+    function onChangeName(name) {
+        //console.log(name);
+        setData(data.name = name);
+        console.log(data.name);
+    }
+    
+      //check null here
+    if(!data){
+        return null;
+    }
     return (
         <div className="edit-container">
             <Row type="flex" justify="center" gutter={[24, 24]}>
@@ -46,16 +42,16 @@ export default function({match}) {
             <Row type="flex" justify="center" gutter={[24, 24]}>
                 <Col span={4}>
                     <div className="gutter-box">
-                        <Input placeholder="Name" value={name} size="large" />
+                        <Input placeholder="Name" defaultValue={data.name} onChange={(event)=>onChangeName(event.target.value)} size="large" />
                     </div>
                 </Col>
                 <Col span={4}>
                     <div className="gutter-box">
                         <InputNumber
-                            value={price}
+                            value={data.price}
                             formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                            onChange={onChange}
+                            //onChange={onChange}
                             size="large"
                             style={{ width: "100%" }}
                         />
@@ -65,18 +61,18 @@ export default function({match}) {
             <Row type="flex" justify="center" gutter={[24, 24]}>
                 <Col span={4}>
                     <div className="gutter-box">
-                        <TextArea placeholder="Image Url" size="large" value={img} autoSize={{ minRows: 3 }} />
+                        <TextArea placeholder="Image Url" size="large" value={data.photoURL} autoSize={{ minRows: 3 }} />
                     </div>
                 </Col>
                 <Col span={4}>
                     <div className="gutter-box">
-                        <TextArea placeholder="Description" value={des} size="large" autoSize={{ minRows: 3 }} />
+                        <TextArea placeholder="Description" value={data.description} size="large" autoSize={{ minRows: 3 }} />
                     </div>
                 </Col>
             </Row>
             <Row type="flex" justify="center" gutter={[24, 24]}>
                 <div className="gutter-box">
-                    <DatePicker value={moment(date)} onChange={onChange} />
+                    <DatePicker value={moment(data.expiryDate)} onChange={onChangeDate} />
                 </div>
             </Row>
             <Row type="flex" justify="center" gutter={[24, 24]} style={{ marginTop: "12px" }}>
