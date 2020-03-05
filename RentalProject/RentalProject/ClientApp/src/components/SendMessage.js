@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Redirect } from "react-router-dom";
 import axios from 'axios';
 import {
     Form,
@@ -9,7 +10,8 @@ import {
     Row,
     Button,
     AutoComplete,
-    TextArea 
+    TextArea,
+    Alert 
   } from 'antd';
 
 const { Option } = Select;
@@ -26,12 +28,38 @@ class sendMessageForm extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 //console.log('Received values of form: ', values);
-                const fetchdata = async () => {
-                    await axios.delete(
-                      `api/message/Create/${values}`,
-                    );
-                  };
-                fetchdata();
+
+                const ItemId = this.props.match.params.id;
+                const Email = values.email;
+                const NickName = values.nickname;
+                const PhoneNumber = values.prefix + values.phone;
+                const MessageContent = values.message;
+
+                const params = new URLSearchParams();
+                params.append('ItemId', ItemId);
+                params.append('Email', Email);
+                params.append('NickName', NickName);
+                params.append('PhoneNumber', PhoneNumber);
+                params.append('MessageContent', MessageContent);
+
+                axios({
+                    method: 'post',
+                    url: 'api/Message/Create',
+                    data: params
+                  }).then(function (response) {
+                    //console.log(response);
+                    debugger;
+                    this.props.push("/");
+                  })
+                  .catch(function (error) {
+                    //console.log(error);
+                    return <Alert
+                    message="Error"
+                    description={error}
+                    type="error"
+                    showIcon
+                  />
+                  });
             }
         });
     };
@@ -134,6 +162,6 @@ class sendMessageForm extends Component {
     }
 }
 
-const WrappedsendMessageForm = Form.create({ name: 'register' })(sendMessageForm);
+const WrappedsendMessageForm = Form.create({ name: 'contact' })(sendMessageForm);
 
 export default WrappedsendMessageForm; 

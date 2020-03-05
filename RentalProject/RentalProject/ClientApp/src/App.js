@@ -21,7 +21,7 @@ export default class App extends Component {
         <Route path='/rental-list' component={RentalList} />
         <Route path='/edititem/:id' component={EditItem} />
         <Route path='/login' component={Login} />
-        <Route path='/send-message' component={SendMessage} />
+        <Route path='/send-message/:id' component={SendMessage} />
         <Route path='/message-wall' component={MessageWall} />
         <Route path='/notfound' component={NotFound} />
       </Layout>

@@ -71,7 +71,7 @@ export default function () {
             align: 'center',
             render: (text, record) => (
                 <span>
-                    <Button onClick={()=>console.log(record)} type="primary">SEND A MESSAGE</Button>
+                    <Button href={`/send-message/${record.id}`} type="primary">SEND A MESSAGE</Button>
                 </span>
             ),
         },

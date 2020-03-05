@@ -9,8 +9,40 @@ const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 
 export default function({match}) {
     const id = match.params.id;
-
     const [data, setData] = useState();
+    
+    const[newName, setNewName] = useState();
+    const[newPrice, setNewPrice] = useState();
+    const[newPhotoUrl, setNewPhotoUrl] = useState();
+    const[newDescription, setNewDescription] = useState();
+    const[newExpiryDate, setNewExpiryDate] = useState();
+
+    function handleSubmit(){
+        const name = newName == null? data.name : newName;
+        const price = newPrice == null? data.price : newPrice;
+        const photoURL = newPhotoUrl == null? data.photoURL : newPhotoUrl;
+        const description = newDescription == null? data.description : newDescription;
+        const expiryDate = newExpiryDate == null? data.expiryDate : newExpiryDate;
+
+        const params = new URLSearchParams();
+        params.append('Id', id);
+        params.append('Name', name);
+        params.append('Price', price);
+        params.append('PhotoURL', photoURL);
+        params.append('Description', description);
+        params.append('ExpiryDate', expiryDate);
+
+        axios({
+            method: 'put',
+            url: 'api/RentalItem/Edit',
+            data: params
+          }).then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    }
 
     //Details Api
     useEffect( async () => {
@@ -19,15 +51,25 @@ export default function({match}) {
           );
         setData(result.data);
     },[]);
-
-    function onChangeDate(date, dateString) {
-        console.log(date, dateString);
-    }
     
     function onChangeName(name) {
-        //console.log(name);
-        setData(data.name = name);
-        console.log(data.name);
+        setNewName(name)
+    }
+
+    function onChangePrice(price) {
+        setNewPrice(price)
+    }
+
+    function onChangeURL(url) {
+        setNewPhotoUrl(url)
+    }
+
+    function onChangeDescription(description) {
+        setNewDescription(description);
+    }
+
+    function onChangeDate(date, dateString) {
+        setNewExpiryDate(dateString);
     }
     
       //check null here
@@ -51,7 +93,7 @@ export default function({match}) {
                             value={data.price}
                             formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                            //onChange={onChange}
+                            onChange={onChangePrice}
                             size="large"
                             style={{ width: "100%" }}
                         />
@@ -61,23 +103,23 @@ export default function({match}) {
             <Row type="flex" justify="center" gutter={[24, 24]}>
                 <Col span={4}>
                     <div className="gutter-box">
-                        <TextArea placeholder="Image Url" size="large" value={data.photoURL} autoSize={{ minRows: 3 }} />
+                        <TextArea placeholder="Image Url" onChange={(event)=>onChangeURL(event.target.value)} size="large" defaultValue={data.photoURL} autoSize={{ minRows: 3 }} />
                     </div>
                 </Col>
                 <Col span={4}>
                     <div className="gutter-box">
-                        <TextArea placeholder="Description" value={data.description} size="large" autoSize={{ minRows: 3 }} />
+                        <TextArea placeholder="Description" onChange={(event)=>onChangeDescription(event.target.value)} defaultValue={data.description} size="large" autoSize={{ minRows: 3 }} />
                     </div>
                 </Col>
             </Row>
             <Row type="flex" justify="center" gutter={[24, 24]}>
                 <div className="gutter-box">
-                    <DatePicker value={moment(data.expiryDate)} onChange={onChangeDate} />
+                    <DatePicker defaultValue={moment(data.expiryDate)} onChange={onChangeDate} />
                 </div>
             </Row>
             <Row type="flex" justify="center" gutter={[24, 24]} style={{ marginTop: "12px" }}>
                 <div className="gutter-box" >
-                    <Button type="primary">Submit</Button>
+                    <Button onClick={handleSubmit} type="primary">Submit</Button>
                 </div>
             </Row>
         </div>
