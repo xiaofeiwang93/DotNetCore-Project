@@ -47,9 +47,8 @@ class sendMessageForm extends Component {
                     url: 'api/Message/Create',
                     data: params
                   }).then(function (response) {
-                    //console.log(response);
-                    debugger;
-                    this.props.push("/");
+                    //console.log(response);  
+                    window.location = "/rental-list";
                   })
                   .catch(function (error) {
                     //console.log(error);
@@ -58,8 +57,16 @@ class sendMessageForm extends Component {
                     description={error}
                     type="error"
                     showIcon
-                  />
+                    />
                   });
+            }
+            else{
+              return <Alert
+                    message="Error"
+                    description={"Something went wrong, please try again"}
+                    type="error"
+                    showIcon
+                    />  
             }
         });
     };
